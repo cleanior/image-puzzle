@@ -1,9 +1,15 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ImageLoader from "./ImageLoader";
+import Image from "./Image"
 
 function App() {
   return (
-    <div className="App">
-      <h1>Hello!!!</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ImageLoader />} />
+        <Route path="/image/:id" element={<Image />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
