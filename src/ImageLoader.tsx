@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ROOT_URL } from "./App";
 import { ImageSpec } from "./Image";
 
 const API_KEY: string = "563492ad6f91700001000001d018c0886b834e648d173692bada7740";
@@ -81,7 +82,7 @@ function ImageLoader(): JSX.Element {
             </form>
             <ul>
                 {images.map((image) => (
-                    <Link key={image.id} to={`/image/${image.id}`}>
+                    <Link key={image.id} to={`${ROOT_URL}/image/${image.id}`}>
                         <img src={image.src.medium} alt={image.alt} />
                     </Link>
                 ))}
