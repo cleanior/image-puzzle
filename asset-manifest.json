@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/image-puzzle/static/js/main.daba97b1.js",
+    "index.html": "/image-puzzle/index.html",
+    "main.daba97b1.js.map": "/image-puzzle/static/js/main.daba97b1.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.daba97b1.js"
+  ]
+}
