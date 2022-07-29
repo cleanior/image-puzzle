@@ -11,12 +11,13 @@ interface State {
     canvases: Array<HTMLCanvasElement[]>;
 }
 
-class PuzzleView extends Component<PuzzleSpec, State>{
+class PuzzleView extends Component<PuzzleSpec, State> {
     private tileCountX: number;
     private tileCountY: number;
     private tileUnit: number;
     private tileCountTotal: number;
     private tiles: Array<Tile>;
+    private imgRef: RefObject<HTMLImageElement>;
     private canvasRefs: Array<RefObject<HTMLCanvasElement>>;
 
     constructor(props: PuzzleSpec) {
@@ -29,6 +30,7 @@ class PuzzleView extends Component<PuzzleSpec, State>{
         this.tiles = Array<Tile>();
 
         this.state = { canvases: Array<HTMLCanvasElement[]>() };
+        this.imgRef = createRef();
         this.canvasRefs = Array<RefObject<HTMLCanvasElement>>();
     }
 
@@ -76,7 +78,7 @@ class PuzzleView extends Component<PuzzleSpec, State>{
     }
 
     public initializeCanvases(): Array<HTMLCanvasElement[]> {
-        const baseMargin = 150;
+        const baseMargin = (this.imgRef.current as HTMLImageElement).width + 16;
         const canvases = Array<HTMLCanvasElement[]>();
         this.tiles.forEach((tile) => {
             if (0 === tile.getIndex() % this.tileCountX) {
@@ -110,9 +112,9 @@ class PuzzleView extends Component<PuzzleSpec, State>{
 
     public drawTileOnCanvas(canvas: HTMLCanvasElement, tile: Tile, fitToCanvas: boolean = false) {
         const { x, y } = tile.getOffset();
-        const ctx = canvas.getContext("2d");
-        ctx?.clearRect(0, 0, this.tileUnit, this.tileUnit);
-        ctx?.drawImage(tile.getImage(),
+        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+        ctx.clearRect(0, 0, this.tileUnit, this.tileUnit);
+        ctx.drawImage(tile.getImage(),
             x * this.tileUnit, y * this.tileUnit, this.tileUnit, this.tileUnit,
             0, 0, this.tileUnit, this.tileUnit);
     }
@@ -248,12 +250,25 @@ class PuzzleView extends Component<PuzzleSpec, State>{
         }
     }
 
+    public verifyCompletion() {
+        let totalIndex = 0;
+        for (let indexY = 0; indexY < this.tileCountY; indexY++) {
+            for (let indexX = 0; indexX < this.tileCountX; indexX++) {
+                const tileId = parseInt(this.state.canvases[indexY][indexX].getAttribute("tileId") as string);
+                if (tileId === totalIndex) {
+                    totalIndex++;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+        console.log("Congrats!!!!!!!!!!!");
+        return true;
+    }
+
     componentDidMount() {
         console.log("Mounted!!");
-        this.setState((prevState, props) => {
-            const canvases: Array<HTMLCanvasElement[]> = this.initializeCanvases();
-            return { canvases };
-        });
     }
 
     componentDidUpdate() {
@@ -271,7 +286,16 @@ class PuzzleView extends Component<PuzzleSpec, State>{
         return (
             <div>
                 <div>
-                    <img src={this.props.refSrc} alt="" />
+                    <img src={this.props.refSrc}
+                        alt=""
+                        onLoad={() => {
+                            console.log("image load done!!");
+                            this.setState((prevState, props) => {
+                                const canvases = this.initializeCanvases();
+                                return { canvases }
+                            });
+                        }}
+                        ref={this.imgRef} />
                 </div>
                 <div>
                     <button onClick={() => {
@@ -281,7 +305,6 @@ class PuzzleView extends Component<PuzzleSpec, State>{
                 <div>{
                     this.tiles.map((tile, index) => (
                         <canvas key={tile.getIndex().toString()}
-                            className="tile"
                             id={`${tile.getIndex()}`}
                             onClick={(event) => {
                                 console.log(event);
@@ -291,8 +314,11 @@ class PuzzleView extends Component<PuzzleSpec, State>{
                                     if (null !== canvasToSwap) {
                                         console.log("swap happens!!!");
                                         const canvases = this.swapCanvases(canvas, canvasToSwap);
+                                        this.verifyCompletion();
                                         return { canvases };
                                     }
+
+                                    return null;
                                 });
                             }}
                             ref={this.canvasRefs[index] = createRef()}
