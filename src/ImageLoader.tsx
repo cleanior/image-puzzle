@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ROOT_URL } from "./App";
 import { ImageSpec } from "./Image";
@@ -67,17 +67,18 @@ function ImageLoader(): JSX.Element {
         const keywordToSearch = undefined;
         loadImages(keywordToSearch, setImages);
     }, []);
+    const keywordInput = useRef() as MutableRefObject<HTMLInputElement>;
 
     return (
         <div>
             <form onSubmit={(event) => {
                 event.preventDefault();
-                const inputElement = document.querySelector(".inputKeyword") as HTMLInputElement;
+                const inputElement = keywordInput.current;
                 console.log(inputElement.value);
                 loadImages(inputElement.value, setImages);
                 inputElement.value = "";
             }}>
-                <input required className="inputKeyword" placeholder="Write to search ..." />
+                <input required placeholder="Write to search ..." ref={keywordInput} />
                 <button>Search</button>
             </form>
             <ul>

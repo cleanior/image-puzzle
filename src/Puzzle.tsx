@@ -1,4 +1,4 @@
-import { Component, ReactNode } from "react"
+import { Component, createRef, ReactNode, RefObject } from "react"
 import { PuzzleSpec } from "./PuzzleView";
 import Tile from "./Tile"
 
@@ -17,6 +17,7 @@ class Puzzle extends Component<PuzzleSpec, State> implements PuzzleSpec {
     private tileUnit: number;
     private tileCountTotal: number;
     private tiles: Array<Tile>;
+    private canvasRefs: Array<RefObject<HTMLCanvasElement>>;
 
     constructor(props: PuzzleSpec) {
         super(props);
@@ -32,6 +33,7 @@ class Puzzle extends Component<PuzzleSpec, State> implements PuzzleSpec {
         this.tiles = Array<Tile>();
 
         this.state = { canvases: Array<HTMLCanvasElement[]>() };
+        this.canvasRefs = Array<RefObject<HTMLCanvasElement>>();
     }
 
     public initializeTiles(baselineTileCount: number) {
@@ -77,8 +79,6 @@ class Puzzle extends Component<PuzzleSpec, State> implements PuzzleSpec {
 
     public initializeCanvases(): Array<HTMLCanvasElement[]> {
         const baseMargin = 150;
-        const canvasArray: HTMLCanvasElement[] =
-            Array.prototype.slice.call(document.querySelectorAll<HTMLCanvasElement>(".tile"));
         const canvases = Array<HTMLCanvasElement[]>();
         this.tiles.forEach((tile) => {
             if (0 === tile.getIndex() % this.tileCountX) {
@@ -87,17 +87,18 @@ class Puzzle extends Component<PuzzleSpec, State> implements PuzzleSpec {
 
             const { x, y } = tile.getOffset();
             const tileIndex = tile.getIndex();
-            canvasArray[tileIndex].setAttribute("canvasX", x.toString());
-            canvasArray[tileIndex].setAttribute("canvasY", y.toString());
-            canvasArray[tileIndex].setAttribute("tileId", tileIndex.toString());
+            const canvas = this.canvasRefs[tileIndex].current as HTMLCanvasElement;
+            canvas.setAttribute("canvasX", x.toString());
+            canvas.setAttribute("canvasY", y.toString());
+            canvas.setAttribute("tileId", tileIndex.toString());
             tile.setCanvasOffset(x, y);
-            canvasArray[tileIndex].width = this.tileUnit;
-            canvasArray[tileIndex].height = this.tileUnit;
+            canvas.width = this.tileUnit;
+            canvas.height = this.tileUnit;
             // 
-            canvasArray[tileIndex].style.position = "absolute";
-            canvasArray[tileIndex].style.left = (baseMargin + x * this.tileUnit).toString() + "px";
-            canvasArray[tileIndex].style.top = (y * this.tileUnit).toString() + "px";
-            canvases[y].push(canvasArray[tileIndex]);
+            canvas.style.position = "absolute";
+            canvas.style.left = (baseMargin + x * this.tileUnit).toString() + "px";
+            canvas.style.top = (y * this.tileUnit).toString() + "px";
+            canvases[y].push(canvas);
 
             this.drawTileOnCanvas(canvases[y][x], tile);
 
@@ -272,7 +273,7 @@ class Puzzle extends Component<PuzzleSpec, State> implements PuzzleSpec {
         return (
             <div>
                 <div>{
-                    this.tiles.map((tile) => (
+                    this.tiles.map((tile, index) => (
                         <canvas key={tile.getIndex().toString()}
                             className="tile"
                             id={`${tile.getIndex()}`}
@@ -288,6 +289,7 @@ class Puzzle extends Component<PuzzleSpec, State> implements PuzzleSpec {
                                     }
                                 });
                             }}
+                            ref={this.canvasRefs[index] = createRef()}
                         />
                     ))
                 }</div>

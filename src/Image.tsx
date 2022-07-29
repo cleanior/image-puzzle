@@ -29,8 +29,9 @@ export interface ImageSpec {
 
 function Image() {
     const { id } = useParams() as { id: string };
-    const [puzzleSpec, setPuzzleSpec] = useState<PuzzleSpec>({} as PuzzleSpec);
-    const [targetImage, setImage] = useState<ImageSpec>({} as ImageSpec);
+    const [puzzleSpec, setPuzzleSpec] = useState({} as PuzzleSpec);
+    const [targetImage, setImage] = useState({} as ImageSpec);
+
     useEffect(() => {
         loadImage(id, setImage);
     }, [id]);
@@ -40,28 +41,9 @@ function Image() {
     return (
         <div>
             {undefined === puzzleSpec.src ?
-                <NormalView image={targetImage} /> :
+                <NormalView image={targetImage} puzzleStartHandler={setPuzzleSpec} /> :
                 <PuzzleView spec={puzzleSpec} />
             }
-            <div>
-                <button onClick={(event) => {
-                    const imageElement = document.querySelector("img") as HTMLImageElement;
-                    if (null !== imageElement) {
-                        setPuzzleSpec((prevState) => {
-                            const puzzleSpec = {
-                                src: targetImage.src.large,
-                                refSrc: targetImage.src.small,
-                                originHeight: imageElement.height,
-                                originWidth: imageElement.width
-                            } as PuzzleSpec;
-                            console.log(prevState === puzzleSpec);
-                            return puzzleSpec;
-                        });
-
-                        document.querySelector("button")?.remove();
-                    }
-                }}>Play Puzzle</button>
-            </div>
         </div >
     );
 }
