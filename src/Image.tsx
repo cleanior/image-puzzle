@@ -44,7 +44,7 @@ function Image({ id }: Props) {
         <div>
             {undefined === puzzleSpec.src ?
                 <NormalView image={targetImage} puzzleStartHandler={setPuzzleSpec} /> :
-                <PuzzleView spec={puzzleSpec} />
+                <PuzzleView src={puzzleSpec.src} refSrc={puzzleSpec.refSrc} originWidth={puzzleSpec.originWidth} originHeight={puzzleSpec.originHeight} />
             }
         </div >
     );
