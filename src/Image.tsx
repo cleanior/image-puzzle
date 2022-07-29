@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { loadImage } from "./ImageLoader";
 import NormalView from "./NormalView";
 import PuzzleView, { PuzzleSpec } from "./PuzzleView";
@@ -27,8 +26,11 @@ export interface ImageSpec {
     width: number;
 }
 
-function Image() {
-    const { id } = useParams() as { id: string };
+interface Props {
+    id: string;
+}
+
+function Image({ id }: Props) {
     const [puzzleSpec, setPuzzleSpec] = useState({} as PuzzleSpec);
     const [targetImage, setImage] = useState({} as ImageSpec);
 

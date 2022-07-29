@@ -1,7 +1,12 @@
 
-import { MutableRefObject, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { ROOT_URL } from "./App";
+import {
+    Dispatch,
+    MutableRefObject,
+    SetStateAction,
+    useEffect,
+    useRef,
+    useState
+} from "react";
 import { ImageSpec } from "./Image";
 
 const API_KEY: string = "563492ad6f91700001000001d018c0886b834e648d173692bada7740";
@@ -60,7 +65,11 @@ export async function loadImage<T>(
     updateFunction(json);
 }
 
-function ImageLoader(): JSX.Element {
+interface Props {
+    onImageSelect: Dispatch<SetStateAction<string>>;
+}
+
+function ImageLoader({ onImageSelect }: Props) {
 
     const [images, setImages] = useState<ImageSpec[]>([]);
     useEffect(() => {
@@ -83,9 +92,16 @@ function ImageLoader(): JSX.Element {
             </form>
             <ul>
                 {images.map((image) => (
-                    <Link key={image.id} to={`${ROOT_URL}/image/${image.id}`}>
-                        <img src={image.src.medium} alt={image.alt} />
-                    </Link>
+                    // <Link key={image.id} to={`${ROOT_URL}/image/${image.id}`}>
+                    <img
+                        key={image.id}
+                        src={image.src.medium}
+                        alt={image.alt}
+                        onClick={() => {
+                            onImageSelect(() => (image.id.toString()));
+                        }}
+                    />
+                    // </Link>
                 ))}
             </ul>
         </div >

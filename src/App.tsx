@@ -1,17 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Dispatch, SetStateAction, useState } from "react";
 import ImageLoader from "./ImageLoader";
 import Image from "./Image"
 
-export const ROOT_URL: string = "/image-puzzle";
-
 function App() {
+  const [imageId, setImageId] = useState<string>();
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={`${ROOT_URL}`} element={<ImageLoader />} />
-        <Route path={`${ROOT_URL}/image/:id`} element={<Image />} />
-      </Routes>
-    </BrowserRouter>
+    undefined === imageId ?
+      <ImageLoader onImageSelect={setImageId as Dispatch<SetStateAction<string>>} /> :
+      <Image id={imageId} />
   );
 }
 
