@@ -13,11 +13,11 @@ const IAMGES_PER_PAGE: number = 80;
 function makeUrlToSearch(
     keywordToSearch?: string,
     id?: string) {
-    if ("undefined" !== typeof id) {
+    if (undefined !== id) {
         return `${EXACT_IMAGE_URL}/${id}`;
     }
 
-    if ("undefined" !== typeof keywordToSearch) {
+    if (undefined !== keywordToSearch) {
         if (0 !== keywordToSearch.trim().length) {
             return `${SEARCH_PHOTOS_URL}?query=${keywordToSearch}&orientation=square&per_page=${IAMGES_PER_PAGE}`;
         }

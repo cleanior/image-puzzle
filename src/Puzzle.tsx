@@ -265,7 +265,7 @@ class Puzzle extends Component<PuzzleSpec, State> implements PuzzleSpec {
         console.log("Rendering!!");
         console.log(this.tiles);
 
-        if ("undefined" == typeof this.tiles[0]) {
+        if (undefined === this.tiles[0]) {
             this.initializeTiles(5);
         }
 

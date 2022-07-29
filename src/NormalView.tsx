@@ -7,7 +7,7 @@ interface Props {
 function NormalView({ image }: Props) {
     return (
         <div>
-            {"undefined" !== typeof image.src ?
+            {undefined !== image.src ?
                 <img src={image.src.large} alt={image.alt} /> :
                 <h1> Loading ...</h1>
             }

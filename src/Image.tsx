@@ -39,7 +39,7 @@ function Image() {
 
     return (
         <div>
-            {"undefined" === typeof puzzleSpec.src ?
+            {undefined === puzzleSpec.src ?
                 <NormalView image={targetImage} /> :
                 <PuzzleView spec={puzzleSpec} />
             }
