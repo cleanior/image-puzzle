@@ -40,11 +40,38 @@ function Image({ id }: Props) {
 
     console.log(puzzleSpec);
 
+    const puzzleStartHandler = (
+        image: ImageSpec,
+        originHeight: number,
+        originWidth: number
+    ) => {
+        const puzzleSpec = {
+            src: image.src.large,
+            refSrc: image.src.small,
+            originHeight,
+            originWidth
+        } as PuzzleSpec;
+        setPuzzleSpec(() => (puzzleSpec));
+    };
+
     return (
         <div>
-            {undefined === puzzleSpec.src ?
-                <NormalView image={targetImage} puzzleStartHandler={setPuzzleSpec} /> :
-                <PuzzleView src={puzzleSpec.src} refSrc={puzzleSpec.refSrc} originWidth={puzzleSpec.originWidth} originHeight={puzzleSpec.originHeight} />
+            {undefined === targetImage.src ?
+                <h1> Loading ...</h1> :
+                <div>
+                    {undefined === puzzleSpec.src ?
+                        <NormalView
+                            image={targetImage}
+                            puzzleStartHandler={puzzleStartHandler}
+                        /> :
+                        <PuzzleView
+                            src={puzzleSpec.src}
+                            refSrc={puzzleSpec.refSrc}
+                            originWidth={puzzleSpec.originWidth}
+                            originHeight={puzzleSpec.originHeight}
+                        />
+                    }
+                </div>
             }
         </div >
     );
