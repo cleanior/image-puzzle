@@ -8,15 +8,10 @@ export interface PuzzleSpec {
     originHeight: number;
 }
 interface State {
-    canvases: (HTMLCanvasElement[])[];
+    canvases: Array<HTMLCanvasElement[]>;
 }
 
-class PuzzleView extends Component<PuzzleSpec, State> implements PuzzleSpec {
-    src: string;
-    refSrc: string;
-    originWidth: number;
-    originHeight: number;
-
+class PuzzleView extends Component<PuzzleSpec, State>{
     private tileCountX: number;
     private tileCountY: number;
     private tileUnit: number;
@@ -26,10 +21,6 @@ class PuzzleView extends Component<PuzzleSpec, State> implements PuzzleSpec {
 
     constructor(props: PuzzleSpec) {
         super(props);
-        this.src = props.src;
-        this.refSrc = props.refSrc;
-        this.originHeight = props.originHeight;
-        this.originWidth = props.originWidth;
         //this.srcLastTile = "https://cdn-icons-png.flaticon.com/512/3413/3413205.png";
         this.tileCountX = 0;
         this.tileCountY = 0;
@@ -50,7 +41,7 @@ class PuzzleView extends Component<PuzzleSpec, State> implements PuzzleSpec {
             console.log(this.tiles);
             for (let indexX = 0; indexX < this.tileCountX; indexX++) {
                 const sourceUrl: string = //this.src;
-                    totalIndex < this.tileCountTotal - 1 ? this.src : "";
+                    totalIndex < this.tileCountTotal - 1 ? this.props.src : "";
                 const sourceX: number = this.tileUnit * indexX;
                 const sourceY: number = this.tileUnit * indexY;
                 const width: number = this.tileUnit;
@@ -66,14 +57,16 @@ class PuzzleView extends Component<PuzzleSpec, State> implements PuzzleSpec {
     }
 
     public estimateTotalTileCount(baselineTileCount: number) {
-        if (this.originWidth <= this.originHeight) {
-            this.tileUnit = Math.floor(this.originWidth / baselineTileCount);
+        const originWidth = this.props.originWidth;
+        const originHeight = this.props.originHeight;
+        if (originWidth <= originHeight) {
+            this.tileUnit = Math.floor(originWidth / baselineTileCount);
             this.tileCountX = baselineTileCount;
-            this.tileCountY = Math.floor(this.originHeight / this.tileUnit);
+            this.tileCountY = Math.floor(originHeight / this.tileUnit);
         }
         else {
-            this.tileUnit = Math.floor(this.originHeight / baselineTileCount);
-            this.tileCountX = Math.floor(this.originHeight / this.tileUnit);
+            this.tileUnit = Math.floor(originHeight / baselineTileCount);
+            this.tileCountX = Math.floor(originHeight / this.tileUnit);
             this.tileCountY = baselineTileCount;
         }
 
@@ -278,13 +271,11 @@ class PuzzleView extends Component<PuzzleSpec, State> implements PuzzleSpec {
         return (
             <div>
                 <div>
-                    <img src={this.refSrc} alt="" />
+                    <img src={this.props.refSrc} alt="" />
                 </div>
                 <div>
                     <button onClick={() => {
-                        console.log("new button");
                         this.shuffleCanvases();
-                        //console.log(this.state.canvases);
                     }}>Shuffle</button>
                 </div>
                 <div>{
