@@ -68,7 +68,7 @@ class PuzzleView extends Component<PuzzleSpec, State> {
         }
         else {
             this.tileUnit = Math.floor(originHeight / baselineTileCount);
-            this.tileCountX = Math.floor(originHeight / this.tileUnit);
+            this.tileCountX = Math.floor(originWidth / this.tileUnit);
             this.tileCountY = baselineTileCount;
         }
 

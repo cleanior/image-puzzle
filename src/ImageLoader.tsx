@@ -24,7 +24,7 @@ function makeUrlToSearch(
 
     if (undefined !== keywordToSearch) {
         if (0 !== keywordToSearch.trim().length) {
-            return `${SEARCH_PHOTOS_URL}?query=${keywordToSearch}&orientation=square&per_page=${IAMGES_PER_PAGE}`;
+            return `${SEARCH_PHOTOS_URL}?query=${keywordToSearch}&per_page=${IAMGES_PER_PAGE}`;
         }
     }
 
