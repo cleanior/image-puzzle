@@ -1,52 +1,28 @@
-import { useEffect, useState } from "react";
-import { loadImage } from "./ImageLoader";
+import { useState } from "react";
 import NormalView from "./NormalView";
 import PuzzleView, { PuzzleSpec } from "./PuzzleView";
 
-export interface ImageSpec {
+export type ImageSpec = {
+    src: string;
     alt: string;
-    avg_color: string;
-    height: number;
-    id: number;
-    liked: false;
-    photographer: string;
-    photographer_id: number;
-    photographer_url: string;
-    src: {
-        landscape: string;
-        large: string;
-        large2x: string;
-        medium: string;
-        original: string;
-        portrait: string;
-        small: string;
-        tiny: string;
-    };
-    url: string;
-    width: number;
-}
+};
 
-interface Props {
-    id: string;
-}
+type ImageProps = {
+    targetImage: ImageSpec;
+};
 
-function Image({ id }: Props) {
+function Image({ targetImage }: ImageProps) {
     const [puzzleSpec, setPuzzleSpec] = useState({} as PuzzleSpec);
-    const [targetImage, setImage] = useState({} as ImageSpec);
-
-    useEffect(() => {
-        loadImage(id, setImage);
-    }, [id]);
 
     console.log(puzzleSpec);
 
     const puzzleStartHandler = (
-        image: ImageSpec,
+        src: string,
         originHeight: number,
         originWidth: number
     ) => {
         const puzzleSpec = {
-            src: image.src.large,
+            src,
             originHeight,
             originWidth
         } as PuzzleSpec;
@@ -55,21 +31,16 @@ function Image({ id }: Props) {
 
     return (
         <div>
-            {undefined === targetImage.src ?
-                <h1> Loading ...</h1> :
-                <div>
-                    {undefined === puzzleSpec.src ?
-                        <NormalView
-                            image={targetImage}
-                            puzzleStartHandler={puzzleStartHandler}
-                        /> :
-                        <PuzzleView
-                            src={puzzleSpec.src}
-                            originWidth={puzzleSpec.originWidth}
-                            originHeight={puzzleSpec.originHeight}
-                        />
-                    }
-                </div>
+            {undefined === puzzleSpec.src ?
+                <NormalView
+                    image={targetImage}
+                    puzzleStartHandler={puzzleStartHandler}
+                /> :
+                <PuzzleView
+                    src={puzzleSpec.src}
+                    originWidth={puzzleSpec.originWidth}
+                    originHeight={puzzleSpec.originHeight}
+                />
             }
         </div >
     );

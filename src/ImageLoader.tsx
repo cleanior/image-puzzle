@@ -15,6 +15,29 @@ const SEARCH_PHOTOS_URL: string = "https://api.pexels.com/v1/search";
 const EXACT_IMAGE_URL: string = "https://api.pexels.com/v1/photos";
 const IAMGES_PER_PAGE: number = 80;
 
+type PexelsImageSpec = {
+    alt: string;
+    avg_color: string;
+    height: number;
+    id: number;
+    liked: false;
+    photographer: string;
+    photographer_id: number;
+    photographer_url: string;
+    src: {
+        landscape: string;
+        large: string;
+        large2x: string;
+        medium: string;
+        original: string;
+        portrait: string;
+        small: string;
+        tiny: string;
+    };
+    url: string;
+    width: number;
+};
+
 function makeUrlToSearch(
     keywordToSearch?: string,
     id?: string) {
@@ -65,13 +88,13 @@ export async function loadImage<T>(
     updateFunction(json);
 }
 
-interface Props {
-    onImageSelect: Dispatch<SetStateAction<string>>;
+interface ImageLoaderProps {
+    onImageSelect: Dispatch<SetStateAction<ImageSpec>>;
 }
 
-function ImageLoader({ onImageSelect }: Props) {
+function ImageLoader({ onImageSelect }: ImageLoaderProps) {
 
-    const [images, setImages] = useState<ImageSpec[]>([]);
+    const [images, setImages] = useState<PexelsImageSpec[]>([]);
     useEffect(() => {
         const keywordToSearch = undefined;
         loadImages(keywordToSearch, setImages);
@@ -92,16 +115,14 @@ function ImageLoader({ onImageSelect }: Props) {
             </form>
             <ul>
                 {images.map((image) => (
-                    // <Link key={image.id} to={`${ROOT_URL}/image/${image.id}`}>
                     <img
                         key={image.id}
                         src={image.src.medium}
                         alt={image.alt}
                         onClick={() => {
-                            onImageSelect(() => (image.id.toString()));
+                            onImageSelect(() => ({ src: image.src.large, alt: image.alt }));
                         }}
                     />
-                    // </Link>
                 ))}
             </ul>
         </div >

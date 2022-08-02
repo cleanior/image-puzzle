@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import ImageLoader from "./ImageLoader";
-import Image from "./Image"
+import Image, { ImageSpec } from "./Image"
 
 function App() {
-  const [imageId, setImageId] = useState<string>();
+  const [targetImage, setTargetImage] = useState({} as ImageSpec);
   return (
-    undefined === imageId ?
-      <ImageLoader onImageSelect={setImageId as Dispatch<SetStateAction<string>>} /> :
-      <Image id={imageId} />
+    undefined === targetImage.src ?
+      <ImageLoader onImageSelect={setTargetImage as Dispatch<SetStateAction<ImageSpec>>} /> :
+      <Image targetImage={targetImage} />
   );
 }
 

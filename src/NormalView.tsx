@@ -3,7 +3,7 @@ import { ImageSpec } from "./Image";
 
 interface NormalViewProps {
     image: ImageSpec;
-    puzzleStartHandler: (image: ImageSpec, originHeight: number, originWidth: number) => void;
+    puzzleStartHandler: (src: string, originHeight: number, originWidth: number) => void;
 }
 
 function NormalView({ image, puzzleStartHandler }: NormalViewProps) {
@@ -11,12 +11,12 @@ function NormalView({ image, puzzleStartHandler }: NormalViewProps) {
     return (
         <div>
             <div>
-                <img src={image.src.large} alt={image.alt} ref={imgRef} />
+                <img src={image.src} alt={image.alt} ref={imgRef} />
             </div>
             <div>
                 <button onClick={() => {
                     const imageElement = imgRef.current;
-                    puzzleStartHandler(image, imageElement.height, imageElement.width);
+                    puzzleStartHandler(image.src, imageElement.height, imageElement.width);
                 }}>Play Puzzle
                 </button>
             </div>
