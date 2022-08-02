@@ -47,7 +47,6 @@ function Image({ id }: Props) {
     ) => {
         const puzzleSpec = {
             src: image.src.large,
-            refSrc: image.src.small,
             originHeight,
             originWidth
         } as PuzzleSpec;
@@ -66,7 +65,6 @@ function Image({ id }: Props) {
                         /> :
                         <PuzzleView
                             src={puzzleSpec.src}
-                            refSrc={puzzleSpec.refSrc}
                             originWidth={puzzleSpec.originWidth}
                             originHeight={puzzleSpec.originHeight}
                         />

@@ -3,7 +3,6 @@ import Tile from "./Tile"
 
 export interface PuzzleSpec {
     src: string;
-    refSrc: string;
     originWidth: number;
     originHeight: number;
 }
@@ -286,7 +285,7 @@ class PuzzleView extends Component<PuzzleSpec, State> {
         return (
             <div>
                 <div>
-                    <img src={this.props.refSrc}
+                    <img src={this.props.src}
                         alt=""
                         onLoad={() => {
                             console.log("image load done!!");
@@ -295,6 +294,7 @@ class PuzzleView extends Component<PuzzleSpec, State> {
                                 return { canvases }
                             });
                         }}
+                        width={150}
                         ref={this.imgRef} />
                 </div>
                 <div>
