@@ -97,6 +97,29 @@ function ImageLoader({ onImageSelect }: ImageLoaderProps) {
             }}>
                 <input required placeholder="Write to search ..." ref={keywordInput} />
                 <button>Search</button>
+                <input type={"file"} accept="image/*" multiple={true} onChange={(event) => {
+                    const files = event.target.files as FileList;
+                    console.log(files);
+                    const images = Array<ImageSpec>();
+                    for (let index = 0; index < files.length; index++) {
+                        const image = {
+                            src: URL.createObjectURL(files[index]),
+                            alt: files[index].name
+                        };
+
+                        images.push(image);
+                    }
+
+                    setImages((prevImages) => {
+                        prevImages.map((prevImage) => {
+                            URL.revokeObjectURL(prevImage.src);
+                            console.log("revoke!!!");
+                            return null;
+                        });
+
+                        return 0 < images.length ? images : prevImages;
+                    });
+                }} />
             </form>
             <ul className={styles.ul}>
                 {images.map((image) => (
