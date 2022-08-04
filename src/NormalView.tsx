@@ -1,9 +1,16 @@
 import { MutableRefObject, useRef } from "react";
 import { ImageSpec } from "./Image";
+import styles from './NormalView.module.css';
 
 interface NormalViewProps {
     image: ImageSpec;
-    puzzleStartHandler: (src: string, originHeight: number, originWidth: number) => void;
+    puzzleStartHandler: (
+        src: string,
+        originalWidth: number,
+        originalHeight: number,
+        targetWidth: number,
+        targetHeight: number
+    ) => void;
 }
 
 function NormalView({ image, puzzleStartHandler }: NormalViewProps) {
@@ -11,12 +18,19 @@ function NormalView({ image, puzzleStartHandler }: NormalViewProps) {
     return (
         <div>
             <div>
-                <img src={image.src} alt={image.alt} ref={imgRef} />
+                <img className={styles.targetImage} src={image.src} alt={image.alt} ref={imgRef} />
             </div>
             <div>
                 <button onClick={() => {
                     const imageElement = imgRef.current;
-                    puzzleStartHandler(image.src, imageElement.height, imageElement.width);
+                    console.log(`${imageElement.width}x${imageElement.height}`);
+                    puzzleStartHandler(
+                        image.src,
+                        imageElement.naturalWidth,
+                        imageElement.naturalHeight,
+                        imageElement.width,
+                        imageElement.height
+                    );
                 }}>Play Puzzle
                 </button>
             </div>

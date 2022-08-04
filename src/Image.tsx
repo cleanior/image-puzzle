@@ -18,13 +18,17 @@ function Image({ targetImage }: ImageProps) {
 
     const puzzleStartHandler = (
         src: string,
-        originHeight: number,
-        originWidth: number
+        originalWidth: number,
+        originalHeight: number,
+        targetWidth: number,
+        targetHeight: number
     ) => {
         const puzzleSpec = {
             src,
-            originHeight,
-            originWidth
+            originalWidth,
+            originalHeight,
+            targetWidth,
+            targetHeight
         } as PuzzleSpec;
         setPuzzleSpec(() => (puzzleSpec));
     };
@@ -38,8 +42,10 @@ function Image({ targetImage }: ImageProps) {
                 /> :
                 <PuzzleView
                     src={puzzleSpec.src}
-                    originWidth={puzzleSpec.originWidth}
-                    originHeight={puzzleSpec.originHeight}
+                    originalWidth={puzzleSpec.originalWidth}
+                    originalHeight={puzzleSpec.originalHeight}
+                    targetWidth={puzzleSpec.targetWidth}
+                    targetHeight={puzzleSpec.targetHeight}
                 />
             }
         </div >

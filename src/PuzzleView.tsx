@@ -1,10 +1,13 @@
 import { Component, createRef, RefObject } from "react"
 import Tile from "./Tile"
+import styles from "./PuzzleView.module.css"
 
 export interface PuzzleSpec {
     src: string;
-    originWidth: number;
-    originHeight: number;
+    originalWidth: number;
+    originalHeight: number;
+    targetWidth: number;
+    targetHeight: number;
 }
 interface State {
     canvases: Array<HTMLCanvasElement[]>;
@@ -14,6 +17,7 @@ class PuzzleView extends Component<PuzzleSpec, State> {
     private tileCountX: number;
     private tileCountY: number;
     private tileUnit: number;
+    private tileImageUnit: number;
     private tileCountTotal: number;
     private tiles: Array<Tile>;
     private imgRef: RefObject<HTMLImageElement>;
@@ -25,6 +29,7 @@ class PuzzleView extends Component<PuzzleSpec, State> {
         this.tileCountX = 0;
         this.tileCountY = 0;
         this.tileUnit = 0;
+        this.tileImageUnit = 0;
         this.tileCountTotal = 0;
         this.tiles = Array<Tile>();
 
@@ -43,12 +48,7 @@ class PuzzleView extends Component<PuzzleSpec, State> {
             for (let indexX = 0; indexX < this.tileCountX; indexX++) {
                 const sourceUrl: string = //this.src;
                     totalIndex < this.tileCountTotal - 1 ? this.props.src : "";
-                const sourceX: number = this.tileUnit * indexX;
-                const sourceY: number = this.tileUnit * indexY;
-                const width: number = this.tileUnit;
-                const height: number = this.tileUnit;
-                const tile: Tile = new Tile(sourceUrl, totalIndex, sourceX, sourceY, width, height);
-                tile.setOffset(indexX, indexY);
+                const tile: Tile = new Tile(sourceUrl, totalIndex, indexX, indexY);
                 this.tiles.push(tile);
                 totalIndex++;
             }
@@ -58,16 +58,20 @@ class PuzzleView extends Component<PuzzleSpec, State> {
     }
 
     public estimateTotalTileCount(baselineTileCount: number) {
-        const originWidth = this.props.originWidth;
-        const originHeight = this.props.originHeight;
-        if (originWidth <= originHeight) {
-            this.tileUnit = Math.floor(originWidth / baselineTileCount);
+        const targetWidth = this.props.targetWidth;
+        const targetHeight = this.props.targetHeight;
+        const originalWidth = this.props.originalWidth;
+        const originalHeight = this.props.originalHeight;
+        if (targetWidth <= targetHeight) {
+            this.tileUnit = Math.floor(targetWidth / baselineTileCount);
+            this.tileImageUnit = Math.floor(originalWidth / baselineTileCount);
             this.tileCountX = baselineTileCount;
-            this.tileCountY = Math.floor(originHeight / this.tileUnit);
+            this.tileCountY = Math.floor(targetHeight / this.tileUnit);
         }
         else {
-            this.tileUnit = Math.floor(originHeight / baselineTileCount);
-            this.tileCountX = Math.floor(originWidth / this.tileUnit);
+            this.tileUnit = Math.floor(targetHeight / baselineTileCount);
+            this.tileImageUnit = Math.floor(originalHeight / baselineTileCount);
+            this.tileCountX = Math.floor(targetWidth / this.tileUnit);
             this.tileCountY = baselineTileCount;
         }
 
@@ -77,7 +81,7 @@ class PuzzleView extends Component<PuzzleSpec, State> {
     }
 
     public initializeCanvases(): Array<HTMLCanvasElement[]> {
-        const baseMargin = (this.imgRef.current as HTMLImageElement).width + 16;
+        const baseMargin = 10;
         const canvases = Array<HTMLCanvasElement[]>();
         this.tiles.forEach((tile) => {
             if (0 === tile.getIndex() % this.tileCountX) {
@@ -114,7 +118,7 @@ class PuzzleView extends Component<PuzzleSpec, State> {
         const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
         ctx.clearRect(0, 0, this.tileUnit, this.tileUnit);
         ctx.drawImage(tile.getImage(),
-            x * this.tileUnit, y * this.tileUnit, this.tileUnit, this.tileUnit,
+            x * this.tileImageUnit, y * this.tileImageUnit, this.tileImageUnit, this.tileImageUnit,
             0, 0, this.tileUnit, this.tileUnit);
     }
 
@@ -285,46 +289,48 @@ class PuzzleView extends Component<PuzzleSpec, State> {
         return (
             <div>
                 <div>
-                    <img src={this.props.src}
-                        alt=""
-                        onLoad={() => {
-                            console.log("image load done!!");
-                            this.setState((prevState, props) => {
-                                const canvases = this.initializeCanvases();
-                                return { canvases }
-                            });
-                        }}
-                        width={150}
-                        ref={this.imgRef} />
+                    <span>
+                        <img className={styles.refImage} src={this.props.src}
+                            alt=""
+                            onLoad={() => {
+                                console.log("image load done!!");
+                                this.setState((prevState, props) => {
+                                    const canvases = this.initializeCanvases();
+                                    return { canvases }
+                                });
+                            }}
+                            ref={this.imgRef} />
+                    </span>
+                    <span className={styles.puzzleSpan}>{
+                        this.tiles.map((tile, index) => (
+                            <canvas key={`${tile.getIndex()}`}
+                                id={`${tile.getIndex()}`}
+                                onClick={(event) => {
+                                    console.log(event);
+                                    this.setState((prevState, props) => {
+                                        const canvas = event.target as HTMLCanvasElement;
+                                        const canvasToSwap = this.getSwappableCanvas(canvas);
+                                        if (null !== canvasToSwap) {
+                                            console.log("swap happens!!!");
+                                            const canvases = this.swapCanvases(canvas, canvasToSwap);
+                                            this.verifyCompletion();
+                                            return { canvases };
+                                        }
+
+                                        return null;
+                                    });
+                                }}
+                                ref={this.canvasRefs[index] = createRef()}
+                            />
+                        ))
+                    }</span>
                 </div>
                 <div>
                     <button onClick={() => {
                         this.shuffleCanvases();
                     }}>Shuffle</button>
                 </div>
-                <div>{
-                    this.tiles.map((tile, index) => (
-                        <canvas key={tile.getIndex().toString()}
-                            id={`${tile.getIndex()}`}
-                            onClick={(event) => {
-                                console.log(event);
-                                this.setState((prevState, props) => {
-                                    const canvas = event.target as HTMLCanvasElement;
-                                    const canvasToSwap = this.getSwappableCanvas(canvas);
-                                    if (null !== canvasToSwap) {
-                                        console.log("swap happens!!!");
-                                        const canvases = this.swapCanvases(canvas, canvasToSwap);
-                                        this.verifyCompletion();
-                                        return { canvases };
-                                    }
 
-                                    return null;
-                                });
-                            }}
-                            ref={this.canvasRefs[index] = createRef()}
-                        />
-                    ))
-                }</div>
             </div>
         );
     }
