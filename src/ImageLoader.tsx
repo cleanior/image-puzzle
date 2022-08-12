@@ -10,6 +10,7 @@ import {
 import { ImageSpec } from "./Image";
 import ImageList from "./ImageList";
 import KeywordInput from "./KeywordInput";
+import LocalImagesInput from "./LocalImagesInput";
 
 const API_KEY: string = "563492ad6f91700001000001d018c0886b834e648d173692bada7740";
 const CURATED_PHOPTOS_URL: string = "https://api.pexels.com/v1/curated";
@@ -98,29 +99,7 @@ function ImageLoader({ onImageSelect }: ImageLoaderProps) {
             }}>
                 <KeywordInput ref={keywordInput} />
                 <button>Search</button>
-                <input type={"file"} accept="image/*" multiple={true} onChange={(event) => {
-                    const files = event.target.files as FileList;
-                    console.log(files);
-                    const images = Array<ImageSpec>();
-                    for (let index = 0; index < files.length; index++) {
-                        const image = {
-                            src: URL.createObjectURL(files[index]),
-                            alt: files[index].name
-                        };
-
-                        images.push(image);
-                    }
-
-                    setImages((prevImages) => {
-                        prevImages.map((prevImage) => {
-                            URL.revokeObjectURL(prevImage.src);
-                            console.log("revoke!!!");
-                            return null;
-                        });
-
-                        return 0 < images.length ? images : prevImages;
-                    });
-                }} />
+                <LocalImagesInput updateImages={setImages} />
             </form>
             <ImageList images={images} onImageSelect={onImageSelect} />
         </div >
