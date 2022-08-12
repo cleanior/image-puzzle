@@ -8,7 +8,7 @@ import {
     useState
 } from "react";
 import { ImageSpec } from "./Image";
-import styles from "./ImageLoader.module.css"
+import ImageList from "./ImageList";
 
 const API_KEY: string = "563492ad6f91700001000001d018c0886b834e648d173692bada7740";
 const CURATED_PHOPTOS_URL: string = "https://api.pexels.com/v1/curated";
@@ -121,18 +121,7 @@ function ImageLoader({ onImageSelect }: ImageLoaderProps) {
                     });
                 }} />
             </form>
-            <ul className={styles.ul}>
-                {images.map((image) => (
-                    <img className={styles.listImage}
-                        key={image.src}
-                        src={image.src}
-                        alt={image.alt}
-                        onClick={() => {
-                            onImageSelect(() => (image));
-                        }}
-                    />
-                ))}
-            </ul>
+            <ImageList images={images} onImageSelect={onImageSelect} />
         </div >
     );
 }
