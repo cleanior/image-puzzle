@@ -9,6 +9,7 @@ import {
 } from "react";
 import { ImageSpec } from "./Image";
 import ImageList from "./ImageList";
+import KeywordInput from "./KeywordInput";
 
 const API_KEY: string = "563492ad6f91700001000001d018c0886b834e648d173692bada7740";
 const CURATED_PHOPTOS_URL: string = "https://api.pexels.com/v1/curated";
@@ -95,7 +96,7 @@ function ImageLoader({ onImageSelect }: ImageLoaderProps) {
                 loadImagesFromPexels(inputElement.value, setImages);
                 inputElement.value = "";
             }}>
-                <input required placeholder="Write to search ..." ref={keywordInput} />
+                <KeywordInput ref={keywordInput} />
                 <button>Search</button>
                 <input type={"file"} accept="image/*" multiple={true} onChange={(event) => {
                     const files = event.target.files as FileList;
