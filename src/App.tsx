@@ -1,12 +1,12 @@
-import { Dispatch, SetStateAction, useState } from "react";
-import ImageLoader from "./ImageLoader";
+import { useState } from "react";
+import ImageShowcase from "./ImageShowcase";
 import Image, { ImageSpec } from "./Image"
 
 function App() {
   const [targetImage, setTargetImage] = useState({} as ImageSpec);
   return (
     undefined === targetImage.src ?
-      <ImageLoader onImageSelect={setTargetImage as Dispatch<SetStateAction<ImageSpec>>} /> :
+      <ImageShowcase onImageSelect={setTargetImage} /> :
       <Image targetImage={targetImage} />
   );
 }

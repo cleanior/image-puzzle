@@ -1,16 +1,6 @@
-
-import {
-    Dispatch,
-    MutableRefObject,
-    SetStateAction,
-    useEffect,
-    useRef,
-    useState
-} from "react";
+import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef } from "react";
 import { ImageSpec } from "./Image";
-import ImageList from "./ImageList";
 import KeywordInput from "./KeywordInput";
-import LocalImagesInput from "./LocalImagesInput";
 
 const API_KEY: string = "563492ad6f91700001000001d018c0886b834e648d173692bada7740";
 const CURATED_PHOPTOS_URL: string = "https://api.pexels.com/v1/curated";
@@ -53,7 +43,7 @@ function makeUrlToSearch(keywordToSearch?: string) {
 
 async function loadImagesFromPexels(
     keywordToSearch: string | undefined,
-    updateFunction: React.Dispatch<React.SetStateAction<Array<ImageSpec>>>) {
+    updateFunction: Dispatch<SetStateAction<Array<ImageSpec>>>) {
 
     const urlToFetch = makeUrlToSearch(keywordToSearch);
     console.log(`load Images: ${urlToFetch}`);
@@ -75,35 +65,27 @@ async function loadImagesFromPexels(
     updateFunction(() => (images));
 }
 
-interface ImageLoaderProps {
-    onImageSelect: Dispatch<SetStateAction<ImageSpec>>;
-}
+interface ProvidedImagesInputProps {
+    updateImages: Dispatch<SetStateAction<ImageSpec[]>>;
+};
 
-function ImageLoader({ onImageSelect }: ImageLoaderProps) {
-
-    const [images, setImages] = useState(Array<ImageSpec>());
-    useEffect(() => {
-        const keywordToSearch = undefined;
-        loadImagesFromPexels(keywordToSearch, setImages);
-    }, []);
+function ProvidedImagesInput({ updateImages }: ProvidedImagesInputProps) {
     const keywordInput = useRef() as MutableRefObject<HTMLInputElement>;
 
-    return (
-        <div>
-            <form onSubmit={(event) => {
-                event.preventDefault();
-                const inputElement = keywordInput.current;
-                console.log(inputElement.value);
-                loadImagesFromPexels(inputElement.value, setImages);
-                inputElement.value = "";
-            }}>
-                <KeywordInput ref={keywordInput} />
-                <button>Search</button>
-                <LocalImagesInput updateImages={setImages} />
-            </form>
-            <ImageList images={images} onImageSelect={onImageSelect} />
-        </div >
-    );
+    useEffect(() => {
+        loadImagesFromPexels(undefined, updateImages);
+    }, [updateImages]);
+
+    return <form onSubmit={(event) => {
+        event.preventDefault();
+        const inputElement = keywordInput.current;
+        console.log(inputElement.value);
+        loadImagesFromPexels(inputElement.value, updateImages);
+        inputElement.value = "";
+    }}>
+        <KeywordInput ref={keywordInput} />
+        <button>Search</button>
+    </form>;
 }
 
-export default ImageLoader;
+export default ProvidedImagesInput;
