@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ImageShowcase from "./ImageShowcase";
+import ImageShowcase from "./showcase/ImageShowcase";
 import Image, { ImageSpec } from "./Image"
 
 function App() {

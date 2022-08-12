@@ -3,7 +3,7 @@ import {
     SetStateAction,
     useState
 } from "react";
-import { ImageSpec } from "./Image";
+import { ImageSpec } from "../Image";
 import ImageList from "./ImageList";
 import LocalImagesInput from "./LocalImagesInput";
 import ProvidedImagesInput from "./ProvidedImagesInput";
