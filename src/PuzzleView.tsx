@@ -20,7 +20,6 @@ class PuzzleView extends Component<PuzzleSpec, State> {
     private tileImageUnit: number;
     private tileCountTotal: number;
     private tiles: Array<Tile>;
-    private imgRef: RefObject<HTMLImageElement>;
     private canvasRefs: Array<RefObject<HTMLCanvasElement>>;
 
     constructor(props: PuzzleSpec) {
@@ -34,7 +33,6 @@ class PuzzleView extends Component<PuzzleSpec, State> {
         this.tiles = Array<Tile>();
 
         this.state = { canvases: Array<HTMLCanvasElement[]>() };
-        this.imgRef = createRef();
         this.canvasRefs = Array<RefObject<HTMLCanvasElement>>();
     }
 
@@ -272,6 +270,11 @@ class PuzzleView extends Component<PuzzleSpec, State> {
 
     componentDidMount() {
         console.log("Mounted!!");
+
+        this.setState((prevState, props) => {
+            const canvases = this.initializeCanvases();
+            return { canvases }
+        });
     }
 
     componentDidUpdate() {
@@ -290,16 +293,7 @@ class PuzzleView extends Component<PuzzleSpec, State> {
             <div>
                 <div>
                     <span>
-                        <img className={styles.refImage} src={this.props.src}
-                            alt=""
-                            onLoad={() => {
-                                console.log("image load done!!");
-                                this.setState((prevState, props) => {
-                                    const canvases = this.initializeCanvases();
-                                    return { canvases }
-                                });
-                            }}
-                            ref={this.imgRef} />
+                        <img className={styles.refImage} src={this.props.src} alt="" />
                     </span>
                     <span className={styles.puzzleSpan}>{
                         this.tiles.map((tile, index) => (
