@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { ImageSpec } from "../Image";
+import { ImageSpec } from "../SelectedImage";
 import styles from "./ImageList.module.css"
 
 interface ImageListProps {

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import ImageShowcase from "./showcase/ImageShowcase";
-import Image, { ImageSpec } from "./Image"
+import SelectedImage, { ImageSpec } from "./SelectedImage"
 
 function App() {
   const [targetImage, setTargetImage] = useState({} as ImageSpec);
   return (
     undefined === targetImage.src ?
       <ImageShowcase onImageSelect={setTargetImage} /> :
-      <Image targetImage={targetImage} />
+      <SelectedImage targetImage={targetImage} />
   );
 }
 

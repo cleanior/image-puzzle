@@ -1,6 +1,7 @@
 import { useState } from "react";
 import NormalView from "./NormalView";
-import PuzzleView, { PuzzleSpec } from "./PuzzleView";
+import { PuzzleSpec } from "./Puzzle";
+import PuzzleView from "./PuzzleView";
 
 export type ImageSpec = {
     src: string;
@@ -11,7 +12,7 @@ type ImageProps = {
     targetImage: ImageSpec;
 };
 
-function Image({ targetImage }: ImageProps) {
+function SelectedImage({ targetImage }: ImageProps) {
     const [puzzleSpec, setPuzzleSpec] = useState({} as PuzzleSpec);
 
     console.log(puzzleSpec);
@@ -52,4 +53,4 @@ function Image({ targetImage }: ImageProps) {
     );
 }
 
-export default Image;
+export default SelectedImage;

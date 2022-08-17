@@ -1,5 +1,5 @@
 import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef } from "react";
-import { ImageSpec } from "../Image";
+import { ImageSpec } from "../SelectedImage";
 import KeywordInput from "./KeywordInput";
 
 const API_KEY: string = "563492ad6f91700001000001d018c0886b834e648d173692bada7740";

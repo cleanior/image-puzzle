@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { ImageSpec } from "../Image";
+import { ImageSpec } from "../SelectedImage";
 
 interface LocalImagesInputProps {
     updateImages: Dispatch<SetStateAction<ImageSpec[]>>;

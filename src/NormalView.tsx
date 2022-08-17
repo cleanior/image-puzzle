@@ -1,5 +1,5 @@
 import { MutableRefObject, useRef } from "react";
-import { ImageSpec } from "./Image";
+import { ImageSpec } from "./SelectedImage";
 import styles from './NormalView.module.css';
 
 interface NormalViewProps {
