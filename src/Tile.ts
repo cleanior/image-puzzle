@@ -1,6 +1,8 @@
 
 class Tile {
     private image: HTMLImageElement;
+    private imageWidth: number;
+    private imageHeight: number;
 
     private index: number;
     private offsetX: number;
@@ -8,9 +10,15 @@ class Tile {
     private canvasOffsetX: number;
     private canvasOffsetY: number;
 
-    constructor(src: string, index: number, offsetX: number, offsetY: number) {
+    constructor(index: number,
+        offsetX: number, offsetY: number,
+        src: string,
+        imageWidth = 0, imageHeight = 0) {
+
         this.image = new Image();
         this.image.src = src;
+        this.imageWidth = imageWidth;
+        this.imageHeight = imageHeight;
 
         this.index = index;
         this.offsetX = offsetX;
@@ -20,7 +28,7 @@ class Tile {
         this.canvasOffsetY = -1;
     }
 
-    public getImage(): HTMLImageElement {
+    public getImage() {
         return this.image;
     }
 
@@ -40,6 +48,15 @@ class Tile {
     public getCanvasOffset() {
         return { x: this.canvasOffsetX, y: this.canvasOffsetY };
     }
+
+    public getImageWidth() {
+        return this.imageWidth;
+    }
+
+    public getImageHeight() {
+        return this.imageHeight;
+    }
 }
+
 
 export default Tile;
