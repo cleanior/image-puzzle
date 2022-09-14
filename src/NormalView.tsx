@@ -13,7 +13,7 @@ interface NormalViewProps {
     ) => void;
 }
 
-function NormalView({ image, puzzleStartHandler }: NormalViewProps) {
+const NormalView = ({ image, puzzleStartHandler }: NormalViewProps) => {
     const imgRef = useRef() as MutableRefObject<HTMLImageElement>;
     return (
         <div>

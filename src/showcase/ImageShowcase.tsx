@@ -12,7 +12,7 @@ interface ImageShowcaseProps {
     onImageSelect: Dispatch<SetStateAction<ImageSpec>>;
 }
 
-function ImageShowcase({ onImageSelect }: ImageShowcaseProps) {
+const ImageShowcase = ({ onImageSelect }: ImageShowcaseProps) => {
     const [images, setImages] = useState(Array<ImageSpec>());
     return (
         <div>

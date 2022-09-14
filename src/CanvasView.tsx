@@ -10,7 +10,7 @@ type CanvasCompProps = {
 const BASE_MARGIN_IN_PX: number = 10;
 const TILE_SCALE_RATIO: number = 0.998;
 
-function CanvasView({ puzzle, canvas }: CanvasCompProps) {
+const CanvasView = ({ puzzle, canvas }: CanvasCompProps) => {
     const canvasRef = useRef() as RefObject<HTMLCanvasElement>;
 
     useEffect(() => {

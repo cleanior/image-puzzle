@@ -7,7 +7,7 @@ interface ImageListProps {
     onImageSelect: Dispatch<SetStateAction<ImageSpec>>;
 }
 
-function ImageList(props: ImageListProps) {
+const ImageList = (props: ImageListProps) => {
     return <ul className={styles.ul}>
         {props.images.map((image) => (
             <img className={styles.listImage}

@@ -2,7 +2,7 @@ import { useState } from "react";
 import ImageShowcase from "./showcase/ImageShowcase";
 import SelectedImage, { ImageSpec } from "./SelectedImage"
 
-function App() {
+const App = () => {
   const [targetImage, setTargetImage] = useState({} as ImageSpec);
   return (
     undefined === targetImage.src ?

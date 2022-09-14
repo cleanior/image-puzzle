@@ -31,7 +31,7 @@ type PexelsImageSpec = {
     width: number;
 };
 
-function makeUrlToSearch(keywordToSearch?: string) {
+const makeUrlToSearch = (keywordToSearch?: string) => {
     if (undefined !== keywordToSearch) {
         if (0 !== keywordToSearch.trim().length) {
             return `${SEARCH_PHOTOS_URL}?query=${keywordToSearch}&per_page=${IAMGES_PER_PAGE}`;
@@ -41,9 +41,9 @@ function makeUrlToSearch(keywordToSearch?: string) {
     return `${CURATED_PHOPTOS_URL}?per_page=${IAMGES_PER_PAGE}`;
 }
 
-async function loadImagesFromPexels(
+const loadImagesFromPexels = async (
     keywordToSearch: string | undefined,
-    updateFunction: Dispatch<SetStateAction<Array<ImageSpec>>>) {
+    updateFunction: Dispatch<SetStateAction<Array<ImageSpec>>>) => {
 
     const urlToFetch = makeUrlToSearch(keywordToSearch);
     console.log(`load Images: ${urlToFetch}`);
@@ -69,7 +69,7 @@ interface ProvidedImagesInputProps {
     updateImages: Dispatch<SetStateAction<ImageSpec[]>>;
 };
 
-function ProvidedImagesInput({ updateImages }: ProvidedImagesInputProps) {
+const ProvidedImagesInput = ({ updateImages }: ProvidedImagesInputProps) => {
     const keywordInput = useRef() as MutableRefObject<HTMLInputElement>;
 
     useEffect(() => {

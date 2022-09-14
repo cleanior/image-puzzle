@@ -12,7 +12,7 @@ type ImageProps = {
     targetImage: ImageSpec;
 };
 
-function SelectedImage({ targetImage }: ImageProps) {
+const SelectedImage = ({ targetImage }: ImageProps) => {
     const [puzzleSpec, setPuzzleSpec] = useState({} as PuzzleSpec);
 
     console.log(puzzleSpec);

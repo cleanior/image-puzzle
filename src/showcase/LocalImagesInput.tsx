@@ -5,7 +5,7 @@ interface LocalImagesInputProps {
     updateImages: Dispatch<SetStateAction<ImageSpec[]>>;
 };
 
-function LocalImagesInput({ updateImages }: LocalImagesInputProps) {
+const LocalImagesInput = ({ updateImages }: LocalImagesInputProps) => {
     return <input type={"file"} accept="image/*" multiple={true} onChange={(event) => {
         const files = event.target.files as FileList;
         console.log(files);
