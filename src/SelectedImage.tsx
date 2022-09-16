@@ -1,6 +1,6 @@
 import { useState } from "react";
 import NormalView from "./NormalView";
-import { PuzzleSpec } from "./Puzzle";
+import { PuzzleSpec } from "./puzzle/Puzzle";
 import PuzzleView from "./PuzzleView";
 
 export type ImageSpec = {

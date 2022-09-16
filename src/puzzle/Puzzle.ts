@@ -10,6 +10,7 @@ export type PuzzleSpec = {
 };
 
 type CanvasesUpdater = (canvases: Array<Array<Canvas>>) => void;
+type ScoreUpdater = ((score: number) => boolean) | null;
 
 class Puzzle {
     private tileCountX: number;
@@ -17,12 +18,14 @@ class Puzzle {
     private tileUnit: number;
     private tileImageUnit: number;
     private tileCountTotal: number;
+    private totalMovement: number;
     private tiles: Array<Tile>;
     private canvases: Array<Array<Canvas>>;
     private spec: PuzzleSpec;
     private updateCanvases: CanvasesUpdater;
+    private updateScore: ScoreUpdater;
 
-    constructor(spec: PuzzleSpec, updateCanvases: CanvasesUpdater) {
+    constructor(spec: PuzzleSpec, updateCanvases: CanvasesUpdater, updateScore: ScoreUpdater = null) {
         this.tileCountX = 0;
         this.tileCountY = 0;
         this.tileUnit = 0;
@@ -32,6 +35,8 @@ class Puzzle {
         this.canvases = Array<Array<Canvas>>();
         this.spec = spec;
         this.updateCanvases = updateCanvases;
+        this.totalMovement = 0;
+        this.updateScore = updateScore;
     }
 
     public update() {
@@ -117,8 +122,14 @@ class Puzzle {
         const canvasToSwap = this.getSwappableCanvas(selectedCanvas);
         if (null !== canvasToSwap) {
             console.log("swap happens!!!");
+            this.totalMovement++;
             const canvases = this.swapCanvases(selectedCanvas, canvasToSwap);
-            this.verifyCompletion();
+            if (this.verifyCompletion()) {
+                if (this.updateScore) {
+                    const score = this.totalMovement;
+                    this.updateScore(score);
+                }
+            }
             return { canvases };
         }
 
@@ -241,6 +252,8 @@ class Puzzle {
             this.swapCanvases(lastCanvas, targetCanvas);
             swapCount++;
         }
+
+        this.totalMovement = 0;
     }
 
     private verifyCompletion() {

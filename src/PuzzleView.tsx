@@ -1,8 +1,8 @@
 import { Component } from "react"
 import styles from "./PuzzleView.module.css"
 import CanvasView from "./CanvasView";
-import Canvas from "./Canvas";
-import Puzzle, { PuzzleSpec } from "./Puzzle";
+import Canvas from "./puzzle/Canvas";
+import Puzzle, { PuzzleSpec } from "./puzzle/Puzzle";
 
 type PuzzleViewState = {
     canvases: Array<Array<Canvas>>;

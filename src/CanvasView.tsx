@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useRef } from "react";
-import Canvas from "./Canvas";
+import Canvas from "./puzzle/Canvas";
 
 type CanvasCompProps = {
     canvas: Canvas;
