@@ -4,8 +4,7 @@ import CanvasView from "./CanvasView";
 import Canvas from "./Canvas";
 import Puzzle, { PuzzleSpec } from "./Puzzle";
 
-
-export type PuzzleViewState = {
+type PuzzleViewState = {
     canvases: Array<Array<Canvas>>;
 };
 
@@ -18,8 +17,9 @@ class PuzzleView extends Component<PuzzleSpec, PuzzleViewState> {
         console.log('PuzzleView::constructor():props:');
         console.log(props);
         this.state = { canvases: Array<Array<Canvas>>() };
-        this.setState = this.setState.bind(this);
-        this.puzzle = new Puzzle(props, this.setState);
+        this.updateCanvases = this.updateCanvases.bind(this);
+        this.puzzle = new Puzzle(props, this.updateCanvases);
+        this.onCanvasClick = this.onCanvasClick.bind(this);
     }
 
     componentDidMount() {
@@ -29,6 +29,15 @@ class PuzzleView extends Component<PuzzleSpec, PuzzleViewState> {
 
     componentDidUpdate() {
         console.log("updated!!");
+    }
+
+    private onCanvasClick = (canvas: Canvas) => {
+        this.puzzle.moveCanvas(canvas);
+        this.puzzle.update();
+    }
+
+    private updateCanvases = (canvases: Array<Array<Canvas>>) => {
+        this.setState({ canvases });
     }
 
     render() {
@@ -49,7 +58,7 @@ class PuzzleView extends Component<PuzzleSpec, PuzzleViewState> {
                     <span className={styles.puzzleSpan}>{
                         this.state.canvases.map((canvasLine) => (
                             canvasLine.map((canvas) => (
-                                <CanvasView key={canvas.getTileIndex()} puzzle={this.puzzle} canvas={canvas} />
+                                <CanvasView key={canvas.getTileIndex()} canvas={canvas} onClick={this.onCanvasClick} />
                             ))
                         ))
                     }</span>

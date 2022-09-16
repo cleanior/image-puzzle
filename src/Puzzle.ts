@@ -1,5 +1,4 @@
 import Canvas from "./Canvas";
-import { PuzzleViewState } from "./PuzzleView";
 import Tile from "./Tile";
 
 export type PuzzleSpec = {
@@ -10,12 +9,7 @@ export type PuzzleSpec = {
     targetHeight: number;
 };
 
-type CanvasesUpdater = ((state: (prevState: Readonly<PuzzleViewState>, props: Readonly<PuzzleSpec>) => (PuzzleViewState | null)) => void);
-
-export interface PuzzleProps {
-    spec: PuzzleSpec;
-    updateCanvases: CanvasesUpdater;
-};
+type CanvasesUpdater = (canvases: Array<Array<Canvas>>) => void;
 
 class Puzzle {
     private tileCountX: number;
@@ -41,10 +35,7 @@ class Puzzle {
     }
 
     public update() {
-        this.updateCanvases((prevState, props) => {
-            const canvases = this.canvases;
-            return { canvases };
-        });
+        this.updateCanvases(this.canvases);
     }
 
     public initialize(baselineTileCount: number) {

@@ -1,16 +1,15 @@
 import { RefObject, useEffect, useRef } from "react";
 import Canvas from "./Canvas";
-import Puzzle from "./Puzzle";
 
 type CanvasCompProps = {
-    puzzle: Puzzle;
     canvas: Canvas;
+    onClick: (canvas: Canvas) => void;
 };
 
 const BASE_MARGIN_IN_PX: number = 10;
 const TILE_SCALE_RATIO: number = 0.998;
 
-const CanvasView = ({ puzzle, canvas }: CanvasCompProps) => {
+const CanvasView = ({ canvas, onClick }: CanvasCompProps) => {
     const canvasRef = useRef() as RefObject<HTMLCanvasElement>;
 
     useEffect(() => {
@@ -44,8 +43,7 @@ const CanvasView = ({ puzzle, canvas }: CanvasCompProps) => {
     return <canvas
         onClick={(event) => {
             console.log(event);
-            puzzle.moveCanvas(canvas);
-            puzzle.update();
+            onClick(canvas);
         }}
         ref={canvasRef}
     />;
