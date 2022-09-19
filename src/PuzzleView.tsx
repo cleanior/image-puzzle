@@ -1,8 +1,10 @@
 import { Component } from "react"
 import styles from "./PuzzleView.module.css"
-import CanvasView from "./CanvasView";
 import Canvas from "./puzzle/Canvas";
 import Puzzle, { PuzzleSpec } from "./puzzle/Puzzle";
+import ShffleButton from "./ShuffleButton";
+import PuzzleReferenceView from "./PuzzleReferenceView";
+import PuzzlePlayView from "./PuzzlePlayView";
 
 type PuzzleViewState = {
     canvases: Array<Array<Canvas>>;
@@ -17,9 +19,8 @@ class PuzzleView extends Component<PuzzleSpec, PuzzleViewState> {
         console.log('PuzzleView::constructor():props:');
         console.log(props);
         this.state = { canvases: Array<Array<Canvas>>() };
-        this.updateCanvases = this.updateCanvases.bind(this);
+        this.bindEventHandlers();
         this.puzzle = new Puzzle(props, this.updateCanvases);
-        this.onCanvasClick = this.onCanvasClick.bind(this);
     }
 
     componentDidMount() {
@@ -31,9 +32,8 @@ class PuzzleView extends Component<PuzzleSpec, PuzzleViewState> {
         console.log("updated!!");
     }
 
-    private onCanvasClick = (canvas: Canvas) => {
-        this.puzzle.moveCanvas(canvas);
-        this.puzzle.update();
+    private bindEventHandlers = () => {
+        this.updateCanvases = this.updateCanvases.bind(this);
     }
 
     private updateCanvases = (canvases: Array<Array<Canvas>>) => {
@@ -49,29 +49,19 @@ class PuzzleView extends Component<PuzzleSpec, PuzzleViewState> {
             console.log(this.state.canvases);
         }
 
-        return (
+        return <div>
             <div>
-                <div>
-                    <span>
-                        <img className={styles.refImage} src={this.props.src} alt="" />
-                    </span>
-                    <span className={styles.puzzleSpan}>{
-                        this.state.canvases.map((canvasLine) => (
-                            canvasLine.map((canvas) => (
-                                <CanvasView key={canvas.getTileIndex()} canvas={canvas} onClick={this.onCanvasClick} />
-                            ))
-                        ))
-                    }</span>
-                </div>
-                <div>
-                    <button onClick={() => {
-                        this.puzzle.shuffleCanvases();
-                        this.puzzle.update();
-                    }}>Shuffle</button>
-                </div>
-
+                <span>
+                    <PuzzleReferenceView imageSource={this.props.src} />
+                </span>
+                <span className={styles.puzzleSpan}>{
+                    <PuzzlePlayView puzzle={this.puzzle} canvases={this.state.canvases} />
+                }</span>
             </div>
-        );
+            <div>
+                <ShffleButton puzzle={this.puzzle} />
+            </div>
+        </div>;
     }
 };
 
