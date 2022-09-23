@@ -3,13 +3,14 @@ import Canvas from "./puzzle/Canvas";
 
 type CanvasCompProps = {
     canvas: Canvas;
+    enableNumbering?: boolean;
     onClick: (canvas: Canvas) => void;
 };
 
 const BASE_MARGIN_IN_PX: number = 10;
 const TILE_SCALE_RATIO: number = 0.998;
 
-const CanvasView = ({ canvas, onClick }: CanvasCompProps) => {
+const CanvasView = ({ canvas, enableNumbering = false, onClick }: CanvasCompProps) => {
     const canvasRef = useRef() as RefObject<HTMLCanvasElement>;
 
     useEffect(() => {
@@ -36,9 +37,14 @@ const CanvasView = ({ canvas, onClick }: CanvasCompProps) => {
             ctx.drawImage(tile.getImage(),
                 x * imageWidth, y * imageHeight, imageWidth, imageHeight,
                 0, 0, canvasWidth, canvasHeight);
+            if (enableNumbering) {
+                ctx.fillStyle = "#ccff00";
+                ctx.font = "15pt Calibri";
+                ctx.fillText(`${tile.getIndex() + 1}`, 10, 30);
+            }
         }
 
-    }, [canvas]);
+    }, [canvas, enableNumbering]);
 
     return <canvas
         onClick={(event) => {

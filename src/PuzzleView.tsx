@@ -5,8 +5,11 @@ import Puzzle, { PuzzleSpec } from "./puzzle/Puzzle";
 import ShffleButton from "./ShuffleButton";
 import PuzzleReferenceView from "./PuzzleReferenceView";
 import PuzzlePlayView from "./PuzzlePlayView";
+import ShowOrderButton from "./ShowOrderButton";
 
 type PuzzleViewState = {
+    enableNumbering: boolean;
+    scoreBoardActivated: boolean;
     canvases: Array<Array<Canvas>>;
 };
 
@@ -18,13 +21,18 @@ class PuzzleView extends Component<PuzzleSpec, PuzzleViewState> {
         super(props);
         console.log('PuzzleView::constructor():props:');
         console.log(props);
-        this.state = { canvases: Array<Array<Canvas>>() };
+        this.state = {
+            enableNumbering: false,
+            scoreBoardActivated: false,
+            canvases: Array<Array<Canvas>>()
+        };
         this.bindEventHandlers();
         this.puzzle = new Puzzle(props, this.updateCanvases);
     }
 
     componentDidMount() {
         console.log("Mounted!!");
+        this.puzzle.shuffleCanvases();
         this.puzzle.update();
     }
 
@@ -32,35 +40,48 @@ class PuzzleView extends Component<PuzzleSpec, PuzzleViewState> {
         console.log("updated!!");
     }
 
+    private initialize = () => {
+        if (undefined === this.state.canvases[0]) {
+            console.log(this.state.canvases);
+            this.puzzle.initialize(5);
+            console.log(this.state.canvases);
+        }
+    }
+
     private bindEventHandlers = () => {
         this.updateCanvases = this.updateCanvases.bind(this);
+        this.toggleNumbering = this.toggleNumbering.bind(this);
     }
 
     private updateCanvases = (canvases: Array<Array<Canvas>>) => {
         this.setState({ canvases });
     }
 
+    private toggleNumbering = () => {
+        this.setState((prev) => {
+            const enableNumbering = !prev.enableNumbering;
+            return { enableNumbering };
+        });
+    }
+
     render() {
         console.log("Rendering!!");
 
-        if (undefined === this.state.canvases[0]) {
-            console.log(this.state.canvases);
-            this.puzzle.initialize(5);
-            console.log(this.state.canvases);
-        }
+        this.initialize();
 
         return <div>
             <div>
-                <span>
-                    <PuzzleReferenceView imageSource={this.props.src} />
+                <span><PuzzleReferenceView imageSource={this.props.src} /></span>
+                <span className={styles.puzzleSpan}>
+                    <PuzzlePlayView
+                        canvases={this.state.canvases}
+                        enableNumbering={this.state.enableNumbering}
+                        puzzle={this.puzzle}
+                    />
                 </span>
-                <span className={styles.puzzleSpan}>{
-                    <PuzzlePlayView puzzle={this.puzzle} canvases={this.state.canvases} />
-                }</span>
             </div>
-            <div>
-                <ShffleButton puzzle={this.puzzle} />
-            </div>
+            <div><ShowOrderButton onClick={this.toggleNumbering} /></div>
+            <div><ShffleButton puzzle={this.puzzle} /></div>
         </div>;
     }
 };
