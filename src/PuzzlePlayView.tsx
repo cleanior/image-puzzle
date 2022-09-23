@@ -6,10 +6,11 @@ type PuzzlePlayViewProps = {
     canvases: Array<Array<Canvas>>;
     enableNumbering?: boolean;
     puzzle: Puzzle;
+    show: boolean;
 }
 
-const PuzzlePlayView = ({ canvases, enableNumbering = false, puzzle }: PuzzlePlayViewProps) => {
-    return <>{
+const PuzzlePlayView = ({ canvases, enableNumbering = false, puzzle, show = true }: PuzzlePlayViewProps) => {
+    return <>{show ?
         canvases.map((canvasLine) => (
             canvasLine.map((canvas) => (
                 <CanvasView
@@ -21,7 +22,7 @@ const PuzzlePlayView = ({ canvases, enableNumbering = false, puzzle }: PuzzlePla
                         puzzle.update();
                     }} />
             ))
-        ))
+        )) : ""
     }</>;
 }
 

@@ -10,7 +10,7 @@ export type PuzzleSpec = {
 };
 
 type CanvasesUpdater = (canvases: Array<Array<Canvas>>) => void;
-type ScoreUpdater = ((score: number) => boolean) | null;
+type ScoreUpdater = ((moves: number, numberOfTries: number) => boolean) | null;
 
 class Puzzle {
     private tileCountX: number;
@@ -19,6 +19,7 @@ class Puzzle {
     private tileImageUnit: number;
     private tileCountTotal: number;
     private totalMovement: number;
+    private numberOfTries: number;
     private tiles: Array<Tile>;
     private canvases: Array<Array<Canvas>>;
     private spec: PuzzleSpec;
@@ -36,6 +37,7 @@ class Puzzle {
         this.spec = spec;
         this.updateCanvases = updateCanvases;
         this.totalMovement = 0;
+        this.numberOfTries = 0;
         this.updateScore = updateScore;
     }
 
@@ -43,9 +45,14 @@ class Puzzle {
         this.updateCanvases(this.canvases);
     }
 
+    public currentMovementCount() {
+        return this.totalMovement;
+    }
+
     public initialize(baselineTileCount: number) {
         this.initializeTiles(baselineTileCount);
         this.initializeCanvases();
+        this.numberOfTries = 0;
     }
 
     private initializeTiles(baselineTileCount: number) {
@@ -123,17 +130,16 @@ class Puzzle {
         if (null !== canvasToSwap) {
             console.log("swap happens!!!");
             this.totalMovement++;
-            const canvases = this.swapCanvases(selectedCanvas, canvasToSwap);
+            this.swapCanvases(selectedCanvas, canvasToSwap);
             if (this.verifyCompletion()) {
                 if (this.updateScore) {
-                    const score = this.totalMovement;
-                    this.updateScore(score);
+                    const moves = this.totalMovement;
+                    this.updateScore(moves, this.numberOfTries);
                 }
             }
-            return { canvases };
         }
 
-        return null;
+        return this.totalMovement;
     }
 
     private swapCanvases(
@@ -254,6 +260,7 @@ class Puzzle {
         }
 
         this.totalMovement = 0;
+        this.numberOfTries++;
     }
 
     private verifyCompletion() {
