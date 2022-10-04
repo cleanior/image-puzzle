@@ -6,7 +6,7 @@ type PuzzleReferenceViewProps = {
 }
 
 const PuzzleReferenceView = ({ imageSource }: PuzzleReferenceViewProps) => {
-    return <img className={styles.refImage} src={imageSource} alt="" />
+    return <img className={styles.refView} src={imageSource} alt="" />
 }
 
 export default PuzzleReferenceView;

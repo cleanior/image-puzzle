@@ -1,3 +1,4 @@
+import styles from "./PuzzleReferenceView.module.css";
 
 interface ScoreBoardButtonProps {
     scoreBoardActivated: boolean;
@@ -5,7 +6,7 @@ interface ScoreBoardButtonProps {
 };
 
 const ScoreBoardButton = ({ scoreBoardActivated, onClick }: ScoreBoardButtonProps) => {
-    return <button onClick={() => {
+    return <button className={styles.refView} onClick={() => {
         console.log("Score Board Clicked!!");
         onClick();
     }}>{scoreBoardActivated ?

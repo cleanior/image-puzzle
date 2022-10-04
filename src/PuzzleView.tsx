@@ -1,6 +1,7 @@
 import { Component } from "react"
 import styles from "./PuzzleView.module.css"
 import Canvas from "./puzzle/Canvas";
+import MovementView from "./MovementView";
 import Puzzle, { PuzzleSpec } from "./puzzle/Puzzle";
 import ScoreBoard from "./scoreboard/ScoreBoard";
 import ShffleButton from "./ShuffleButton";
@@ -108,7 +109,7 @@ class PuzzleView extends Component<PuzzleSpec, PuzzleViewState> {
                 />
             </div>
             <div><ShowOrderButton onClick={this.toggleNumbering} show={!this.state.scoreBoardActivated} /></div>
-            <div><p>#Moves: {this.puzzle.currentMovementCount()}</p></div>
+            <div><MovementView movementCount={this.puzzle.currentMovementCount()} /></div>
             <div><ShffleButton puzzle={this.puzzle} show={!this.state.scoreBoardActivated} /></div>
         </div>;
     }

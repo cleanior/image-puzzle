@@ -1,4 +1,5 @@
 import Puzzle from "./puzzle/Puzzle";
+import styles from "./PuzzleReferenceView.module.css"
 
 type ShuffleButtonProps = {
     puzzle: Puzzle;
@@ -7,7 +8,7 @@ type ShuffleButtonProps = {
 
 const ShffleButton = ({ puzzle, show = true }: ShuffleButtonProps) => {
     return show ?
-        <button onClick={() => {
+        <button className={styles.refView} onClick={() => {
             puzzle.shuffleCanvases();
             puzzle.update();
         }}>
